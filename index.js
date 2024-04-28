@@ -254,14 +254,24 @@ app.get("/api/getCamera", async (req, res) => {
     // const camera = await Camera.findById(id);
     // res.json([camera]);
 });
-
+const names = [
+    { name: "Erkhem-Erdene", id: "2024A001" },
+    { name: "Munkhjin", id: "2024A002" },
+    { name: "Dulguun", id: "2024A003" },
+];
 app.post("/base64", async (req, res) => {
     const data = req.body;
     const image = data.data;
-    // const d = Buffer.from(image);
+    const person = JSON.parse(image);
+    const matchedNames = person.FaceSearchResponse.map(
+        (response) => response.MatchedFaces[0].Faces.ExternalIndex
+    );
+    const filteredNames = names.filter((person) =>
+        matchedNames.includes(person.name)
+    );
 
-    console.log(data);
-    res.send("Hello World!");
+    console.log(filteredNames);
+    res.send(filteredNames);
 });
 
 const PORT = 5000;
